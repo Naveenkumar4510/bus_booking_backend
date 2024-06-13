@@ -5,7 +5,7 @@ FROM openjdk:17
 WORKDIR /app
 
 # Copy the application JAR file into the container
-COPY --from=buld /target/BusBooking-0.0.1-SNAPSHOT.jar /app/BusBooking.jar
+COPY --from=build /target/BusBooking-0.0.1-SNAPSHOT.jar /app/BusBooking.jar
 
 
 # Expose the port your application will run on
