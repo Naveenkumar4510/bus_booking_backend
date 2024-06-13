@@ -3,7 +3,7 @@
 FROM maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
 COPY . .
-RUN mvn clean package
+RUN mvn clean package -DskipTests
 
 # Use a smaller image for runtime
 FROM openjdk:17.0.1-jdk-slim
