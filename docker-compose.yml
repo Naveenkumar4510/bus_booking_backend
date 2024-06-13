@@ -15,7 +15,16 @@ services:
     container_name: busbooking-container
     ports:
       - "9090:9090"
-    env_file:
-      - ./src/main/resources/.env  # Update this line to reflect the correct path
     depends_on:
       - mongo
+    environment:
+      MONGO_DATABASE: bus-db  # Replace with your actual database name
+      MONGO_USER: naveen          # Replace with your actual MongoDB user
+      MONGO_PASSWORD: 12345  # Replace with your actual MongoDB password
+      MONGO_CLUSTER: cluster0.arybrtd.mongodb.net  # Replace with your actual MongoDB cluster URI
+    command: ["java", "-jar", "/app/BusBooking.jar"]  # Command to start the Spring Boot application
+    volumes:
+      - ./src/main/resources:/app/resources  # Optional: Mount resources directory if needed
+    ports:
+      - "9090:9090"
+
