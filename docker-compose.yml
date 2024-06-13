@@ -18,13 +18,9 @@ services:
     depends_on:
       - mongo
     environment:
-      MONGO_DATABASE: bus-db  # Replace with your actual database name
-      MONGO_USER: naveen          # Replace with your actual MongoDB user
-      MONGO_PASSWORD: 12345  # Replace with your actual MongoDB password
-      MONGO_CLUSTER: cluster0.arybrtd.mongodb.net  # Replace with your actual MongoDB cluster URI
-    command: ["java", "-jar", "/app/BusBooking.jar"]  # Command to start the Spring Boot application
+      SPRING_DATA_MONGODB_URI: mongodb+srv://naveen:12345@cluster0.arybrtd.mongodb.net/bus-db?retryWrites=true&w=majority
+    command: ["java", "-jar", "/app/BusBooking.jar"]
     volumes:
       - ./src/main/resources:/app/resources  # Optional: Mount resources directory if needed
     ports:
       - "9090:9090"
-
