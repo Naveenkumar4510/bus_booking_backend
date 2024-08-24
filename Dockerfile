@@ -1,16 +1,13 @@
-# Use a base image with OpenJDK 17
-FROM openjdk:17
 
-# Set the working directory in the container
+# Use a base image with JDK and Maven installed
+FROM maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copy the application JAR file into the container
-COPY target/BusBooking-0.0.1-SNAPSHOT.jar /app/BusBooking.jar
-
-
-# Expose the port your application will run on
+# Use a smaller image for runtime
+FROM openjdk:17.0.1-jdk-slim
+WORKDIR /app
 EXPOSE 9090
-
-
-# Command to run the application
-CMD ["java", "-jar", "BusBooking.jar"]
+COPY --from=build /app/target/BusBooking-0.0.1-SNAPSHOT.jar /app/BusBooking.jar
+CMD ["java", "-jar", "/app/BusBooking.jar"]
