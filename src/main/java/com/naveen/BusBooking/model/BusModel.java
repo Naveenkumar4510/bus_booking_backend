@@ -11,6 +11,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,8 @@ import java.util.List;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class BusModel {
     @Id
-private ObjectId id;
+    @JsonSerialize(using = com.naveen.BusBooking.Serializer.ObjectIdSerializer.class)
+    private ObjectId id;
     @NotBlank(message = "Bus name cannot be blank")
     private String busName;
     @NotBlank(message = "Bus number cannot be blank")

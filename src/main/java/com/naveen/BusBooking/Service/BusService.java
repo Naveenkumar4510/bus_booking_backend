@@ -136,29 +136,44 @@ public class BusService {
         }
 
     }
-    public boolean updateBus(String id, BusModel updatedBus) {
-        Optional<BusModel> existingBusOptional = busRepository.findBusById(id);
-        if (existingBusOptional.isPresent()) {
-            BusModel existingBus = existingBusOptional.get();
+//    public boolean updateBus(String id, BusModel updatedBus) {
+//        Optional<BusModel> existingBusOptional = busRepository.findBusById(id);
+//        if (existingBusOptional.isPresent()) {
+//            BusModel existingBus = existingBusOptional.get();
+//            existingBus.setBusName(updatedBus.getBusName());
+//            existingBus.setBusNumber(updatedBus.getBusNumber());
+//            existingBus.setSource(updatedBus.getSource());
+//            existingBus.setDestination(updatedBus.getDestination());
+//            existingBus.setArrivalTime(updatedBus.getArrivalTime());
+//            existingBus.setDepartureTime(updatedBus.getDepartureTime());
+//            // Update other fields similarly
+//try{
+//    busRepository.save(existingBus);
+//    return true; // Update successful
+//}
+//catch (DataAccessException ex) {
+//    log.error("Failed to update bus details :{} ",ex.getMessage());
+//    throw  new BusBookingException("failed to update bus"+ex.getMessage());
+//}
+//
+//        } else {
+//            return false; // Bus not found
+//        }
+//    }
+
+    public boolean updateBus(String busNumber, BusModel updatedBus) {
+        Optional<BusModel> existingBusOpt = busRepository.findBusByBusNumber(busNumber);
+        if (existingBusOpt.isPresent()) {
+            BusModel existingBus = existingBusOpt.get();
             existingBus.setBusName(updatedBus.getBusName());
-            existingBus.setBusNumber(updatedBus.getBusNumber());
             existingBus.setSource(updatedBus.getSource());
             existingBus.setDestination(updatedBus.getDestination());
-            existingBus.setArrivalTime(updatedBus.getArrivalTime());
             existingBus.setDepartureTime(updatedBus.getDepartureTime());
-            // Update other fields similarly
-try{
-    busRepository.save(existingBus);
-    return true; // Update successful
-}
-catch (DataAccessException ex) {
-    log.error("Failed to update bus details :{} ",ex.getMessage());
-    throw  new BusBookingException("failed to update bus"+ex.getMessage());
-}
-
-        } else {
-            return false; // Bus not found
+            existingBus.setArrivalTime(updatedBus.getArrivalTime());
+            busRepository.save(existingBus);
+            return true;
         }
+        return false;
     }
 
     public boolean updateSeatAvailability(String busId, int seatNumber, boolean available) {

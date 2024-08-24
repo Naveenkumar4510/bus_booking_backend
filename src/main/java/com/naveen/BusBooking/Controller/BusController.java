@@ -124,13 +124,34 @@ public ResponseEntity<List<BusModel>> getAllBuses() {
     }
 
     //updating full bus details at /{id} endpoint
+//    @PutMapping("/{id}")
+//    public ResponseEntity<?> updateBus(@PathVariable String id, @Valid @RequestBody BusModel updatedBus) {
+//        try {
+//            boolean updated = busService.updateBus(id, updatedBus);
+//            if (updated) {
+//                BusModel updatedEntity = busService.getBusById(id);
+//                return ResponseEntity.ok(updatedEntity); // Return ResponseEntity<BusModel>
+//            } else {
+//                return ResponseEntity.notFound().build(); // Bus not found
+//            }
+//        } catch (BusBookingException ex) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("Failed to update bus: " + ex.getMessage());
+//        }
+//    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateBus(@PathVariable String id, @Valid @RequestBody BusModel updatedBus) {
         try {
             boolean updated = busService.updateBus(id, updatedBus);
             if (updated) {
-                BusModel updatedEntity = busService.getBusById(id);
-                return ResponseEntity.ok(updatedEntity); // Return ResponseEntity<BusModel>
+                Optional<BusModel> updatedEntityOptional = busService.getBusByNumber(id);
+                if (updatedEntityOptional.isPresent()) {
+                    BusModel updatedEntity = updatedEntityOptional.get();
+                    return ResponseEntity.ok(updatedEntity); // Return ResponseEntity<BusModel>
+                } else {
+                    return ResponseEntity.notFound().build(); // Bus not found
+                }
             } else {
                 return ResponseEntity.notFound().build(); // Bus not found
             }
@@ -210,7 +231,7 @@ public ResponseEntity<List<BusModel>> getAllBuses() {
     }
 
     //getting available seats at /busId/availableBus endpoint
-    @GetMapping("/{busId}/availableSeats")
+    @GetMapping("/availableSeats/{busId}")
     public ResponseEntity<List<Integer>> getAvailableSeats(@PathVariable String busId) {
     try {
         ObjectId objectId = new ObjectId(busId);
